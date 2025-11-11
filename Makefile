@@ -6,6 +6,10 @@ YELLOW := \033[0;33m
 RED := \033[0;31m
 NC := \033[0m # No Color
 
+# Paper quality settings
+QUALITY_THRESHOLD ?= 0.75  # 0.75 = NeurIPS Accept, 0.85 = Spotlight
+MAX_ITERATIONS ?= 3
+
 help: ## Show this help message
 	@echo '${GREEN}AI-Researcher - Quick Commands${NC}'
 	@echo ''
@@ -138,7 +142,7 @@ run-task2: ## Run Level 2 task (Reference-Based Ideation)
 		--category $(CATEGORY) \
 		--instance_id $(INSTANCE)
 
-run-paper: ## Generate paper from results
+run-paper: ## Generate paper from results (basic)
 	@echo "${GREEN}Generating paper...${NC}"
 	@if [ -z "$(CATEGORY)" ]; then \
 		echo "${RED}Error: CATEGORY not specified${NC}"; \
@@ -153,6 +157,39 @@ run-paper: ## Generate paper from results
 	docker-compose exec ai-researcher python3 paper_agent/writing.py \
 		--research_field $(CATEGORY) \
 		--instance_id $(INSTANCE)
+
+run-enhanced-paper: ## Generate NeurIPS-tier quality paper (recommended!)
+	@echo "${GREEN}Generating NeurIPS-tier quality paper...${NC}"
+	@echo "${YELLOW}This includes quality checks and improvements${NC}"
+	@if [ -z "$(CATEGORY)" ]; then \
+		echo "${RED}Error: CATEGORY not specified${NC}"; \
+		echo "Usage: make run-enhanced-paper CATEGORY=vq INSTANCE=rotation_vq"; \
+		exit 1; \
+	fi
+	@if [ -z "$(INSTANCE)" ]; then \
+		echo "${RED}Error: INSTANCE not specified${NC}"; \
+		echo "Usage: make run-enhanced-paper CATEGORY=vq INSTANCE=rotation_vq"; \
+		exit 1; \
+	fi
+	docker-compose exec ai-researcher python3 paper_agent/enhanced_writing.py \
+		--research_field $(CATEGORY) \
+		--instance_id $(INSTANCE) \
+		--quality_threshold $(QUALITY_THRESHOLD) \
+		--max_iterations $(MAX_ITERATIONS)
+
+check-paper-quality: ## Check paper quality score
+	@echo "${GREEN}Checking paper quality...${NC}"
+	@if [ -z "$(CATEGORY)" ]; then \
+		echo "${RED}Error: CATEGORY not specified${NC}"; \
+		echo "Usage: make check-paper-quality CATEGORY=vq INSTANCE=rotation_vq"; \
+		exit 1; \
+	fi
+	@if [ -z "$(INSTANCE)" ]; then \
+		echo "${RED}Error: INSTANCE not specified${NC}"; \
+		echo "Usage: make check-paper-quality CATEGORY=vq INSTANCE=rotation_vq"; \
+		exit 1; \
+	fi
+	@cat $(CATEGORY)/target_sections/$(INSTANCE)/quality_report.txt || echo "No quality report found. Run enhanced paper generation first."
 
 # ==============================================================================
 # EXAMPLES
