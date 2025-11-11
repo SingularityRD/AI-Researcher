@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  ai-researcher:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        - TARGETPLATFORM=linux/amd64
+    container_name: ai-researcher-main
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ANONYMIZED_TELEMETRY=false
+    env_file:
+      - .env
+    ports:
+      - "${PORT:-7020}:8000"
+    volumes:
+      - ./workplace_paper:/workplace_paper
+      - ./cache:/cache
+      - ./logs:/logs
+      - ./benchmark:/benchmark
+    networks:
+      - ai-researcher-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 16G
+        reservations:
+          memory: 4G
+    # GPU support - uncomment if you have NVIDIA GPU
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  redis:
+    image: redis:7-alpine
+    container_name: ai-researcher-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ai-researcher-net
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  ai-researcher-net:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
