@@ -17,6 +17,43 @@ help: ## Show this help message
 	@echo ''
 	@echo 'Available targets:'
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  ${YELLOW}%-20s${NC} %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@echo ''
+	@echo '${GREEN}🚀 Quick Start:${NC}'
+	@echo '  make up              # Start all services'
+	@echo '  make webgui          # Open Web GUI (http://localhost:7860)'
+	@echo '  make run-enhanced-paper CATEGORY=vq INSTANCE=rotation_vq'
+
+# ==============================================================================
+# WEB GUI - EASIEST WAY TO USE! 🎨
+# ==============================================================================
+
+webgui: ## Start Web GUI (Gradio) - Easiest way to use!
+	@echo "${GREEN}🎨 Starting Web GUI...${NC}"
+	@if ! docker-compose ps | grep -q "webgui.*Up"; then \
+		echo "${YELLOW}Starting webgui service...${NC}"; \
+		docker-compose up -d webgui; \
+		echo "${GREEN}Waiting for Web GUI to start...${NC}"; \
+		sleep 8; \
+	fi
+	@echo "${GREEN}✅ Web GUI is running!${NC}"
+	@echo ""
+	@echo "${YELLOW}Open in your browser:${NC}"
+	@echo "  ${GREEN}http://localhost:7860${NC}"
+	@echo ""
+	@echo "Or if using remote server:"
+	@echo "  ${GREEN}http://your-server-ip:7860${NC}"
+
+webgui-stop: ## Stop Web GUI
+	@echo "${YELLOW}Stopping Web GUI...${NC}"
+	docker-compose stop webgui
+
+webgui-logs: ## View Web GUI logs
+	docker-compose logs -f webgui
+
+webgui-restart: ## Restart Web GUI
+	@echo "${YELLOW}Restarting Web GUI...${NC}"
+	docker-compose restart webgui
+	@echo "${GREEN}Web GUI restarted! Open http://localhost:7860${NC}"
 
 # ==============================================================================
 # INSTALLATION

@@ -30,6 +30,8 @@ Welcome to **AI-Researcher**🤗 AI-Researcher introduces a revolutionary breakt
  - 🔄 **Seamless Orchestration**: From concept to publication
  - 🧠 **Advanced AI Integration**: Powered by cutting-edge AI agents
  - 🚀 **Research Acceleration**: Streamlined scientific innovation
+ - 🏭 **Production-Ready**: Docker orchestration, health monitoring, one-command setup
+ - 📄 **NeurIPS-Tier Papers**: Automatic quality enhancement with hallucination prevention
 
 --------------------------------------------------------------------------------
 
@@ -53,6 +55,7 @@ Welcome to **AI-Researcher**🤗 AI-Researcher introduces a revolutionary breakt
  - 💻 **Algorithm Validation and Refinement**: Automates testing, performance evaluation, and iterative optimization.
  - 📈 **Result Analysis**: Delivers advanced interpretation of experimental data and insights.
  - ✍️ **Manuscript Creation**: Automatically generates polished, full-length academic papers.
+ - 🌟 **NeurIPS-Tier Paper Quality**: Enhanced writing with statistical significance, strong baselines, comprehensive ablations, and hallucination prevention to ensure papers meet top-tier conference standards (NeurIPS/ICML/ICLR).
 
 <div align="center">
   <!-- <img src="./assets/AI-Researchernew-intro.pdf" alt="Logo" width="100%"> -->
@@ -103,6 +106,12 @@ Welcome to **AI-Researcher**🤗 AI-Researcher introduces a revolutionary breakt
 * <a href='#acknowledgements'>🙏 Acknowledgements</a>
 * <a href='#cite'>🌟 Cite</a>
 
+**📚 Additional Resources:**
+* [🇹🇷 Türkçe Kullanım Kılavuzu](./KULLANIM_KILAVUZU.md) - Comprehensive Turkish User Guide
+* [🚀 Quick Start Guide](./QUICKSTART.md) - 5-minute setup
+* [📝 Paper Quality Enhancements](./PAPER_IMPROVEMENTS.md) - NeurIPS-tier paper writing
+* [🏭 Production Setup](./IMPROVEMENTS.md) - Infrastructure improvements
+
 
 <span id='quick-start'/>
 
@@ -110,41 +119,133 @@ Welcome to **AI-Researcher**🤗 AI-Researcher introduces a revolutionary breakt
 
 <span id='installation'/>
 
-### Installation
+### 🚀 **Fastest Setup (Recommended)** - Production-Ready in 5 Minutes!
 
-#### AI Installation
+#### Option 1: 🎨 **Web GUI** (Easiest - No Terminal Required!)
 
-1. Using [uv](https://docs.astral.sh/uv/)
-
-> We recommend to use [uv](https://docs.astral.sh/uv/) to manage packages in our project (Much more faster than conda)
+Perfect for users who prefer graphical interfaces:
 
 ```bash
-# install uv
-curl -LsSf https://astral.sh/uv/install.sh | sh
-source ~/.bashrc
-
-# clone the project
+# Clone the project
 git clone https://github.com/HKUDS/AI-Researcher.git
 cd AI-Researcher
 
-# install and activate enviroment
+# Setup environment
+cp .env.example .env
+# Edit .env and add your API keys (OPENROUTER_API_KEY, etc.)
+
+# Start Web GUI
+make up
+make webgui
+```
+
+**Open in browser:** http://localhost:7860 🎉
+
+**Web GUI Features:**
+- ✅ **Visual Interface** - No command line needed!
+- ✅ **Easy Configuration** - Set API keys and parameters in UI
+- ✅ **Task Selection** - Choose examples or custom research
+- ✅ **Real-time Logs** - Watch research progress live
+- ✅ **Paper Download** - Download generated papers directly
+- ✅ **Built with Gradio** - Modern, responsive interface
+
+![Web GUI Screenshot](./assets/webgui/image-20250606135137558.png)
+
+#### Option 2: 🖥️ **Command Line** (For Advanced Users)
+
+For automation and scripting:
+
+```bash
+# Clone the project
+git clone https://github.com/HKUDS/AI-Researcher.git
+cd AI-Researcher
+
+# Setup environment
+cp .env.example .env
+# Edit .env and add your API keys
+
+# Start all services
+make up
+
+# Or use the convenient run script
+./run.sh setup
+./run.sh start
+```
+
+**That's it!** 🎉 Your AI-Researcher is now running with:
+- ✅ Docker orchestration with Redis
+- ✅ Health monitoring at http://localhost:8000/health
+- ✅ Web GUI at http://localhost:7860
+- ✅ Auto-restart on failures
+- ✅ GPU support (if available)
+
+For detailed setup guide, see [QUICKSTART.md](./QUICKSTART.md)
+
+**Available Make Commands:**
+```bash
+make help                    # Show all available commands
+make webgui                  # Start Web GUI (http://localhost:7860) ⭐
+make run-research           # Run research agent
+make run-paper              # Generate paper
+make run-enhanced-paper     # Generate NeurIPS-tier paper (recommended!)
+make check-paper-quality    # Check paper quality score
+make health                 # Check system health
+make logs                   # View logs
+```
+
+---
+
+### Installation
+
+#### Method 1: Docker Compose (Recommended for Production)
+
+**Prerequisites:** [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/)
+
+```bash
+# Clone and setup
+git clone https://github.com/HKUDS/AI-Researcher.git
+cd AI-Researcher
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your API keys and settings
+
+# Start services
+docker-compose up -d
+
+# Check health
+curl http://localhost:8000/health
+```
+
+#### Method 2: Using [uv](https://docs.astral.sh/uv/) (Local Development)
+
+> We recommend using [uv](https://docs.astral.sh/uv/) to manage packages (much faster than conda)
+
+```bash
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source ~/.bashrc
+
+# Clone the project
+git clone https://github.com/HKUDS/AI-Researcher.git
+cd AI-Researcher
+
+# Install and activate environment
 uv venv --python 3.11
 source ./.venv/bin/activate
 uv pip install -e .
 playwright install
 ```
 
-#### Docker Installation
+#### Method 3: Docker Only
 
-To set up the agent-interactive environment, we use Docker for containerization. Please ensure you have [Docker](https://www.docker.com/) installed on your system before proceeding. For running the research agent, we utilize the Docker image 'tjbtech1/airesearcher:v1t'. You can pull this image by executing the following command:
+To set up the agent-interactive environment manually with Docker:
 
 ```bash
+# Pull pre-built image
 docker pull tjbtech1/airesearcher:v1
-```
 
-or you can build the docker image from our provided [Dockerfile](./docker/Dockerfile). 
-
-```bash
+# Or build from source
 cd ./docker && docker build -t tjbtech1/airesearcher:v1 .
 ```
 
@@ -952,6 +1053,16 @@ Select the following example to run our AI-Researcher:
   3. **Paper Writing** ✍️📝
      * **Writer Agent** 📄: Automatically generates full-length academic papers by integrating research ideas, motivations, newly designed algorithm frameworks, and algorithm validation performance. Leveraging a hierarchical writing approach, it creates polished manuscripts with precision and clarity.
 
+     * **🌟 Enhanced Paper Writer** 📝✨: Generates **NeurIPS/ICML/ICLR-tier papers** with automatic quality enhancement:
+       - **Quality Assessment**: Weighted scoring system (Contributions 25%, Experiments 30%, Methodology 20%, etc.)
+       - **Statistical Rigor**: Automatically adds p-values, confidence intervals, effect sizes, and multiple-run statistics
+       - **Strong Baselines**: Suggests and compares with SOTA methods
+       - **Comprehensive Ablations**: Generates systematic component and design choice ablations
+       - **Theoretical Analysis**: Adds complexity analysis, convergence guarantees, and formal justifications
+       - **Required Sections**: Auto-generates limitations, reproducibility statements, and broader impact discussions
+       - **🛡️ Hallucination Prevention**: Strict validation to prevent fabricating results, citations, or theoretical claims
+       - **Iterative Enhancement**: Keeps improving until paper meets quality threshold (0.75+ for acceptance, 0.85+ for spotlight)
+
 🚀 This fully automated system removes the need for manual intervention across the entire research lifecycle, enabling effortless and seamless scientific discovery—from initial concept to final publication. 🚀 It serves as an excellent research assistant, aiding researchers in achieving their goals efficiently and effectively.
 
 --------------------------------------------------------------------------------
@@ -1028,6 +1139,39 @@ python run_infer_idea.py --instance_path ../benchmark/final/${category}/${instan
 
 ### 2. Paper Writing Agent
 
+#### 🌟 Enhanced Paper Writing (NeurIPS-Tier Quality - Recommended!)
+
+For generating **NeurIPS/ICML/ICLR-tier papers** with automatic quality enhancement and hallucination prevention:
+
+```bash
+# Using Makefile (easiest!)
+make run-enhanced-paper CATEGORY=vq INSTANCE=rotation_vq
+
+# Or with custom quality settings
+make run-enhanced-paper \
+  CATEGORY=vq \
+  INSTANCE=rotation_vq \
+  QUALITY_THRESHOLD=0.85 \
+  MAX_ITERATIONS=5
+
+# Check paper quality after generation
+make check-paper-quality CATEGORY=vq INSTANCE=rotation_vq
+```
+
+**What Enhanced Paper Writing Provides:**
+- ✅ **Quality Assessment**: Automatic scoring against NeurIPS standards (0.85+ = Spotlight, 0.75+ = Accept)
+- ✅ **Statistical Significance**: Adds p-values, confidence intervals, effect sizes
+- ✅ **Strong Baselines**: Suggests and compares with SOTA methods
+- ✅ **Comprehensive Ablations**: Generates systematic ablation studies
+- ✅ **Theoretical Analysis**: Adds complexity analysis and formal justifications
+- ✅ **Required Sections**: Auto-generates limitations, reproducibility, broader impact
+- ✅ **Hallucination Prevention**: Never fabricates results, citations, or theorems
+- ✅ **Iterative Improvement**: Keeps enhancing until quality threshold is met
+
+For detailed documentation, see [PAPER_IMPROVEMENTS.md](./PAPER_IMPROVEMENTS.md)
+
+#### Standard Paper Writing
+
 If you want to generate the paper after the research agent has conducted the research, you can use the following command in the [`paper_agent/run_infer.sh`](./paper_agent/run_paper.sh):
 
 ```bash
@@ -1042,6 +1186,11 @@ research_field=vq
 instance_id=rotated_vq
 
 python path/to/AI-Researcher/paper_agent/writing.py --research_field ${research_field} --instance_id ${instance_id}
+```
+
+**Or using Makefile:**
+```bash
+make run-paper CATEGORY=vq INSTANCE=rotation_vq
 ```
 
 ### 3. Benchmark Data and Collection
