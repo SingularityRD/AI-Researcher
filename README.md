@@ -121,19 +121,51 @@ Welcome to **AI-Researcher**🤗 AI-Researcher introduces a revolutionary breakt
 
 ### 🚀 **Fastest Setup (Recommended)** - Production-Ready in 5 Minutes!
 
-For the fastest and easiest setup with docker-compose and Makefile:
+#### Option 1: 🎨 **Web GUI** (Easiest - No Terminal Required!)
+
+Perfect for users who prefer graphical interfaces:
 
 ```bash
 # Clone the project
 git clone https://github.com/HKUDS/AI-Researcher.git
 cd AI-Researcher
 
-# Setup environment (copy .env.example to .env and add your API keys)
+# Setup environment
 cp .env.example .env
 # Edit .env and add your API keys (OPENROUTER_API_KEY, etc.)
 
-# Start everything with one command!
-make setup  # Builds Docker image and starts services
+# Start Web GUI
+make up
+make webgui
+```
+
+**Open in browser:** http://localhost:7860 🎉
+
+**Web GUI Features:**
+- ✅ **Visual Interface** - No command line needed!
+- ✅ **Easy Configuration** - Set API keys and parameters in UI
+- ✅ **Task Selection** - Choose examples or custom research
+- ✅ **Real-time Logs** - Watch research progress live
+- ✅ **Paper Download** - Download generated papers directly
+- ✅ **Built with Gradio** - Modern, responsive interface
+
+![Web GUI Screenshot](./assets/webgui/image-20250606135137558.png)
+
+#### Option 2: 🖥️ **Command Line** (For Advanced Users)
+
+For automation and scripting:
+
+```bash
+# Clone the project
+git clone https://github.com/HKUDS/AI-Researcher.git
+cd AI-Researcher
+
+# Setup environment
+cp .env.example .env
+# Edit .env and add your API keys
+
+# Start all services
+make up
 
 # Or use the convenient run script
 ./run.sh setup
@@ -143,6 +175,7 @@ make setup  # Builds Docker image and starts services
 **That's it!** 🎉 Your AI-Researcher is now running with:
 - ✅ Docker orchestration with Redis
 - ✅ Health monitoring at http://localhost:8000/health
+- ✅ Web GUI at http://localhost:7860
 - ✅ Auto-restart on failures
 - ✅ GPU support (if available)
 
@@ -151,6 +184,7 @@ For detailed setup guide, see [QUICKSTART.md](./QUICKSTART.md)
 **Available Make Commands:**
 ```bash
 make help                    # Show all available commands
+make webgui                  # Start Web GUI (http://localhost:7860) ⭐
 make run-research           # Run research agent
 make run-paper              # Generate paper
 make run-enhanced-paper     # Generate NeurIPS-tier paper (recommended!)

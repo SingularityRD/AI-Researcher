@@ -1,6 +1,48 @@
 version: '3.8'
 
 services:
+  # 🎨 Web GUI - Gradio Interface (Recommended for easy usage!)
+  webgui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        - TARGETPLATFORM=linux/amd64
+    container_name: ai-researcher-webgui
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONIOENCODING=utf-8
+    env_file:
+      - .env
+    ports:
+      - "${WEBGUI_PORT:-7860}:7860"
+    volumes:
+      - ./workplace_paper:/app/workplace_paper
+      - ./cache:/app/cache
+      - ./logs:/app/logs
+      - ./benchmark:/app/benchmark
+      - ./.env:/app/.env
+    working_dir: /app
+    command: python web_ai_researcher.py
+    networks:
+      - ai-researcher-net
+    restart: unless-stopped
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7860 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          memory: 2G
+
   ai-researcher:
     build:
       context: .

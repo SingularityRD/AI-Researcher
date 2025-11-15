@@ -19,7 +19,35 @@
 
 ## 🚀 Hızlı Başlangıç
 
-### En Hızlı Yöntem (5 Dakika)
+### 🎨 En Kolay Yöntem: Web GUI (Terminal Bilgisi Gerektirmez!)
+
+**Grafiksel arayüz tercih edenler için:**
+
+```bash
+# 1. Projeyi klonla
+git clone https://github.com/HKUDS/AI-Researcher.git
+cd AI-Researcher
+
+# 2. Environment dosyasını hazırla
+cp .env.example .env
+nano .env  # API anahtarlarını ekle
+
+# 3. Web GUI'yi başlat
+make up
+make webgui
+```
+
+**Tarayıcıda aç:** http://localhost:7860 🎉
+
+**Web GUI Özellikleri:**
+- ✅ **Görsel Arayüz** - Terminal bilgisi gerektirmez!
+- ✅ **Kolay Konfigürasyon** - API anahtarları ve parametreleri UI'da ayarla
+- ✅ **Task Seçimi** - Örnek tasklar veya kendi araştırmanı seç
+- ✅ **Canlı Loglar** - Araştırma ilerlemesini gerçek zamanlı izle
+- ✅ **Paper İndirme** - Oluşturulan paper'ları direkt indir
+- ✅ **Modern Arayüz** - Gradio ile responsive tasarım
+
+### 🖥️ Alternatif: Komut Satırı (İleri Kullanıcılar)
 
 ```bash
 # 1. Projeyi klonla
@@ -31,14 +59,16 @@ cp .env.example .env
 # .env dosyasını düzenle ve API anahtarlarını ekle
 
 # 3. Her şeyi başlat!
-make setup
-make start
+make up
 
 # 4. Health check
 make health
 ```
 
 **Tebrikler! 🎉** AI-Researcher çalışıyor.
+
+- 🎨 **Web GUI:** http://localhost:7860
+- 🏥 **Health API:** http://localhost:8000/health
 
 ---
 
@@ -208,7 +238,112 @@ python research_agent/run_infer_plan.py \
 
 ## 📖 Temel Kullanım
 
-### 1. Research Agent Çalıştırma
+### 🎨 Web GUI ile Kullanım (ÖNERİLEN!)
+
+#### Başlatma
+
+```bash
+# Tüm servisleri başlat
+make up
+
+# Web GUI'yi aç
+make webgui
+```
+
+**Tarayıcıda:** http://localhost:7860
+
+#### Web GUI Kullanımı
+
+![Web GUI Ana Ekran](./assets/webgui/image-20250606135137558.png)
+
+**1. Environment Ayarları**
+
+![Environment Config](./assets/webgui/image-20250606135325373.png)
+
+Environment sekmesinde:
+- ✅ **API Keys** - OpenRouter, OpenAI, Anthropic API anahtarları
+- ✅ **Model Selection** - Completion ve cheap model seçimi
+- ✅ **GPU Settings** - GPU konfigürasyonu
+- ✅ **Task Settings** - Category, instance ID, task level
+
+**2. Task Seçimi**
+
+![Task Selection](./assets/webgui/image-20250606135507970.png)
+
+- **Örnek Tasklar** - Hazır örneklerden seç:
+  - Vector Quantization (VQ)
+  - Graph Neural Networks (GNN)
+  - Recommendation Systems
+  - Diffusion & Flow Matching
+  - Reasoning
+
+- **Custom Task** - Kendi araştırmanı tanımla:
+  - Category seç
+  - Instance ID gir
+  - Task level belirle (task1/task2)
+  - Research idea yaz (Level 1)
+  - Veya sadece papers ver (Level 2)
+
+**3. Research Başlat**
+
+1. Environment ayarlarını yapılandır
+2. Task'ı seç veya custom task oluştur
+3. "Start Research" butonuna bas
+4. Canlı logları izle
+
+**4. İlerlemeyi İzle**
+
+Web GUI'de real-time:
+- ✅ Log çıktıları
+- ✅ Durum güncellemeleri
+- ✅ Hata mesajları (varsa)
+- ✅ Tamamlanma yüzdesi
+
+**5. Paper İndir**
+
+Research tamamlandığında:
+- ✅ "Generate Paper" butonuna bas
+- ✅ Paper oluşması için bekle
+- ✅ "Download PDF" ile indir
+
+#### Web GUI Komutları
+
+```bash
+# Web GUI başlat
+make webgui
+
+# Logları görüntüle
+make webgui-logs
+
+# Yeniden başlat
+make webgui-restart
+
+# Durdur
+make webgui-stop
+```
+
+#### Remote Erişim
+
+Sunucuda çalıştırıyorsanız:
+
+```bash
+# Sunucuda
+make up
+make webgui
+
+# Local makinenizde browser'da aç:
+http://your-server-ip:7860
+
+# Veya SSH tunnel ile:
+ssh -L 7860:localhost:7860 user@your-server
+# Sonra local'de: http://localhost:7860
+```
+
+---
+
+### 🖥️ Komut Satırı ile Kullanım
+
+#### 1. Research Agent Çalıştırma
 
 AI-Researcher iki seviyede çalışır:
 
@@ -916,6 +1051,40 @@ A: Her prompt'ta strict validation rules + otomatik number/citation checking + c
 
 **Q: Paper'ı düzenleyebilir miyim?**
 A: Evet! LaTeX source output'u düzenleyebilirsiniz.
+
+### Web GUI
+
+**Q: Web GUI vs Komut Satırı - Hangisini kullanmalıyım?**
+A:
+- **Web GUI:** Terminal bilgisi gerektirmez, görsel arayüz, başlangıç için ideal
+- **Komut Satırı:** Otomasyon, scripting, ileri kullanıcılar için
+
+**Q: Web GUI port'unu değiştirebilir miyim?**
+A: Evet! `.env` dosyasında `WEBGUI_PORT=7860` değerini değiştirin.
+
+**Q: Web GUI'ye uzaktan erişebilir miyim?**
+A: Evet! İki yöntem:
+1. Direkt: `http://server-ip:7860`
+2. SSH tunnel: `ssh -L 7860:localhost:7860 user@server`
+
+**Q: Web GUI çalışmıyor, ne yapmalıyım?**
+A:
+```bash
+# Logları kontrol et
+make webgui-logs
+
+# Yeniden başlat
+make webgui-restart
+
+# Port kullanımda olabilir
+sudo lsof -i :7860
+```
+
+**Q: Web GUI'de API key değiştirsem Docker restart gerekli mi?**
+A: Hayır! Web GUI'de environment sekmesinden direkt değiştirebilirsiniz.
+
+**Q: Web GUI ile birden fazla research paralel çalıştırabilir miyim?**
+A: Şu an tek research destekleniyor. Paralel için komut satırını kullanın.
 
 ### Teknik
 
