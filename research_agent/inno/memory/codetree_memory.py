@@ -102,17 +102,39 @@ class DummyReranker(Reranker):
             wrapped_reranked_results += "---\n"
         return wrapped_reranked_results
 
-# 使用示例
+# Example usage
 if __name__ == "__main__":
-    code_memory = CodeTreeMemory(project_path = './code_db', db_name='code_tree', platform='OpenAI', api_key='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')
-    
-    # 添加代码文件到内存
-    code_memory.add_code_files("/Users/tangjiabin/Documents/reasoning/SelfAgent/workplace_test/SelfAgent", exclude_prefix=['workplace_', '__pycache__', 'code_db', '.git'])
-    
-    # 查询代码
-    query_results = code_memory.query_code("The definition of BaseAction", n_results=10)
-    
-    for result in query_results:
-        print(f"File: {result['file']}")
-        print(f"Content: {result['content'][:100]}...")  # 只打印前100个字符
-        print("---")
+    import os
+    from dotenv import load_dotenv
+
+    # ✅ SECURITY FIX: Load API key from environment
+    load_dotenv()
+    api_key = os.getenv('OPENAI_API_KEY')
+    if not api_key:
+        raise ValueError(
+            "❌ OPENAI_API_KEY not found in environment!\n"
+            "Please set it in .env file or environment variables."
+        )
+
+    # Create code memory instance with API key from environment
+    code_memory = CodeTreeMemory(
+        project_path='./code_db',
+        db_name='code_tree',
+        platform='OpenAI',
+        api_key=api_key  # ✅ From environment, not hard-coded
+    )
+
+    # Example: Add code files to memory
+    # code_memory.add_code_files(
+    #     "path/to/your/code",
+    #     exclude_prefix=['workplace_', '__pycache__', 'code_db', '.git']
+    # )
+
+    # Example: Query code
+    # query_results = code_memory.query_code("The definition of BaseAction", n_results=10)
+    # for result in query_results:
+    #     print(f"File: {result['file']}")
+    #     print(f"Content: {result['content'][:100]}...")
+    #     print("---")
+
+    print("✅ CodeTreeMemory module loaded. Run with your own project path.")
