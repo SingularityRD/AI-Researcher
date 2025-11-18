@@ -1,0 +1,67 @@
+# AI-Researcher Dependencies
+# Generated from setup.cfg for Docker build compatibility
+
+# Core dependencies
+numpy
+openai>=1.52.0
+pytest
+requests
+tqdm
+pre-commit
+instructor
+litellm==1.55.0
+beautifulsoup4
+browsergym==0.13.0
+chromadb
+click
+datasets
+docling
+filelock
+Flask
+gymnasium
+html2text
+httpx
+huggingface_hub
+inquirer
+loguru
+mammoth
+markdownify
+matplotlib
+networkx
+pandas
+pathvalidate==3.2.1
+pdfminer.six
+Pillow
+playwright==1.39.0
+prompt_toolkit
+psutil
+puremagic
+pydantic
+pydub
+python_pptx
+PyYAML
+rich
+SpeechRecognition
+tenacity
+termcolor
+tiktoken
+tree_sitter==0.23.1
+uvicorn
+youtube_transcript_api
+moviepy
+faster_whisper
+sentence_transformers
+gradio
+arxiv
+
+# Additional dependencies for web server
+fastapi
+python-multipart
+python-dotenv
+redis
+
+# PyTorch Geometric dependencies (installed separately in Dockerfile)
+# torch==1.13.1+cu116
+# torchvision==0.14.1+cu116
+# torchaudio==0.13.1
+# torch_geometric

@@ -99,7 +99,7 @@ ENV ANONYMIZED_TELEMETRY=false
 
 # 设置supervisor配置
 RUN mkdir -p /var/log/supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN pip3 install --no-cache-dir requests fastapi uvicorn python-multipart httpx torch_geometric
 
